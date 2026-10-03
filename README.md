@@ -90,7 +90,7 @@ NetBox **4.0 and later**. The agent reads `/api/status/` and adapts:
 
 Both v1 (`Token …`) and v2 (`nbt_…`, sent as `Bearer …`, NetBox 4.5+) API tokens work.
 
-The behaviour was checked against the NetBox 4.7 source code and an in-memory imitation of the API used by the test suite. It has not yet been tested against a live NetBox instance (see [Open items](#open-items)).
+The integration test (`test/integration`) passes against live NetBox 4.1 and 4.7 instances. The unit tests use an in-memory imitation of the API.
 
 ## Required permissions
 
@@ -236,7 +236,6 @@ The test imports `examples/custom-fields.yaml` through the API and creates the o
 
 - The license is Apache-2.0 for now; the final decision is pending.
 - Contribution sign-off (DCO or CLA) is not decided yet.
-- The agent has not been run against a live NetBox yet. The API shapes were checked against the NetBox 4.7 source, and `test/integration` is ready to run, but it hasn't been run so far.
 - The custom field file is imported through the REST API in the integration test. Importing it through the UI's bulk import form is untested.
 - The minimal permission set in [Required permissions](#required-permissions) has not been tested with a restricted token.
 
