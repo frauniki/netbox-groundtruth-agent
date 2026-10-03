@@ -34,7 +34,8 @@ cd "$work/netbox-docker"
 # Random credentials for this throwaway instance. NetBox 4.5+ (netbox-docker
 # with API_TOKEN_PEPPER_*) uses v2 tokens: nbt_<12-char key>.<40-char token>;
 # older images take a 40-character v1 token in SUPERUSER_API_TOKEN.
-rand() { LC_ALL=C tr -dc 'A-Za-z0-9' </dev/urandom | head -c "$1"; }
+# pipefail off: tr ends with SIGPIPE when head has read enough.
+rand() { (set +o pipefail; LC_ALL=C tr -dc 'A-Za-z0-9' </dev/urandom | head -c "$1"); }
 key=$(rand 12)
 secret=$(rand 40)
 cat > docker-compose.override.yml <<YAML
