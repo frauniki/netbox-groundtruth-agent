@@ -38,7 +38,7 @@ archives:
 nfpms:
   - package_name: groundtruth-agent
     homepage: https://github.com/frauniki/netbox-groundtruth-agent
-    maintainer: netbox-groundtruth-agent maintainers <noreply@github.com>
+    maintainer: frauniki <27264119+frauniki@users.noreply.github.com>
     description: A NetBox agent that records observed hardware facts (serials, CPUs, memory, disks, NICs, GPUs) in NetBox.
     license: Apache-2.0
     formats: [deb]
