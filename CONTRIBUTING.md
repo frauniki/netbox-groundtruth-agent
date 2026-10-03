@@ -24,7 +24,7 @@ golangci-lint run ./...
 
 - One topic per pull request, with a description of the motivation.
 - CI (lint, tests, build) must pass.
-- Sign-off requirements (DCO or CLA) have not been decided yet; this section will be updated.
+- Every commit must be signed off under the [Developer Certificate of Origin](https://developercert.org/) (DCO). Use `git commit -s`, which adds a `Signed-off-by: Your Name <you@example.com>` line. The sign-off certifies that you wrote the change or otherwise have the right to submit it under the project's license (Apache-2.0). No separate contributor agreement is required.
 
 ## Releases
 

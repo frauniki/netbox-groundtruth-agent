@@ -2,6 +2,7 @@
 
 ## Checklist
 
+- [ ] Commits are signed off (`git commit -s`, see CONTRIBUTING.md)
 - [ ] Tests added or updated
 - [ ] `go test ./...` and `golangci-lint run ./...` pass
 - [ ] `CHANGELOG.md` updated

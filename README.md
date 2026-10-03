@@ -234,7 +234,6 @@ The test imports `examples/custom-fields.yaml` through the API and creates the o
 
 ## Open items
 
-- Contribution sign-off (DCO or CLA) is not decided yet.
 - The custom field file is imported through the REST API in the integration test. Importing it through the UI's bulk import form is untested.
 - The minimal permission set in [Required permissions](#required-permissions) has not been tested with a restricted token.
 
