@@ -1,0 +1,62 @@
+# groundtruth-agent configuration. Every key is optional except netbox.url;
+# the values shown are the defaults unless marked "example".
+
+netbox:
+  url: https://netbox.example.com        # example
+  # The API token is never stored here. token_file wins over token_env.
+  token_file: /etc/groundtruth-agent/token
+  token_env: NETBOX_TOKEN
+  # PEM bundle to trust instead of the system roots.
+  ca_file: ""
+  timeout: 30s
+  # Extra headers for every request, e.g. for an authenticating proxy.
+  # Values are expanded with ${ENV}.
+  headers: {}
+  #   X-Proxy-Key: ${PROXY_KEY}         # example
+  # direct, or iap (needs a binary built with the "iap" tag; release builds have it).
+  auth: direct
+  iap:
+    audience: ""                         # OAuth client ID of the IAP-protected backend
+    credentials_file: ""                 # service account key; empty = Application Default Credentials
+
+collect:
+  disks:
+    exclude_names: ["loop*", "ram*", "zram*", "sr*", "fd*", "dm-*", "md*", "nbd*", "rbd*"]
+    exclude_removable: true
+    exclude_transports: ["usb"]          # nvme, sata, sas, usb, virtio, unknown
+    exclude_models: []                   # glob, e.g. ["PERC*", "LOGICAL VOLUME"] for RAID logical drives
+  nics:
+    exclude_names: []                    # virtual interfaces and SR-IOV VFs are always excluded
+    exclude_usb: true
+  gpus:
+    pci_vendors: ["10de"]                # PCI vendor IDs of display controllers that count as GPUs
+
+sync:
+  create_interfaces: false
+  inventory: true
+  owner_tag: managed-by-groundtruth      # slug; the tag must exist in NetBox
+  max_changes: 100                       # 0 disables the limit
+  max_deletes: 10                        # 0 disables the limit
+  # Agent field -> NetBox custom field name. "" disables a field.
+  custom_fields:
+    cpu_model: cpu_model
+    cpu_sockets: cpu_sockets
+    cpu_cores: cpu_cores
+    cpu_threads: cpu_threads
+    memory_total_gb: memory_total_gb
+    gpu_model: gpu_model
+    gpu_count: gpu_count
+    bios_version: bios_version
+    os_version: os_version
+    last_collected: last_collected
+  # Link speed (Mbps) -> NetBox interface type, used only when creating interfaces.
+  # Entries here are merged into the defaults.
+  interface_types: {}
+  #   10000: 10gbase-t                   # example: copper 10G instead of SFP+
+  default_interface_type: other
+
+log:
+  format: json                           # json or text
+
+metrics:
+  textfile: ""                           # e.g. /var/lib/prometheus/node-exporter/groundtruth_agent.prom

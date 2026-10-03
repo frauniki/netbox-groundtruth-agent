@@ -1,0 +1,24 @@
+[Unit]
+Description=Report observed hardware to NetBox (groundtruth-agent)
+Documentation=https://github.com/frauniki/netbox-groundtruth-agent
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+# Dry run by default. To write to NetBox, review the reports first, then
+# override ExecStart with a drop-in (systemctl edit groundtruth-agent.service):
+#   [Service]
+#   ExecStart=
+#   ExecStart=/usr/bin/groundtruth-agent apply -confirm -config /etc/groundtruth-agent/config.yaml
+ExecStart=/usr/bin/groundtruth-agent plan -config /etc/groundtruth-agent/config.yaml
+# 2 = changes planned/applied. 3 (unregistered), 4 (duplicate) and
+# 5 (safety limit) mark the unit failed so they get noticed.
+SuccessExitStatus=2
+# Root is needed to read the SMBIOS table and some disk serial numbers.
+User=root
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectHome=yes
+ProtectSystem=strict
+ReadWritePaths=-/var/lib/prometheus/node-exporter

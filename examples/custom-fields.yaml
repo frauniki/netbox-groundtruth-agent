@@ -1,0 +1,73 @@
+# Device custom fields used by groundtruth-agent, in NetBox's bulk import
+# format (Customization > Custom Fields > Import, YAML). Rename them freely and
+# map the new names in sync.custom_fields.
+---
+name: cpu_model
+label: CPU model
+type: text
+object_types: [dcim.device]
+group_name: Ground truth
+description: Observed by groundtruth-agent
+---
+name: cpu_sockets
+label: CPU sockets
+type: integer
+object_types: [dcim.device]
+group_name: Ground truth
+description: Observed by groundtruth-agent
+---
+name: cpu_cores
+label: CPU cores
+type: integer
+object_types: [dcim.device]
+group_name: Ground truth
+description: Observed by groundtruth-agent
+---
+name: cpu_threads
+label: CPU threads
+type: integer
+object_types: [dcim.device]
+group_name: Ground truth
+description: Observed by groundtruth-agent
+---
+name: memory_total_gb
+label: Memory (GiB)
+type: integer
+object_types: [dcim.device]
+group_name: Ground truth
+description: Observed by groundtruth-agent
+---
+name: gpu_model
+label: GPU model
+type: text
+object_types: [dcim.device]
+group_name: Ground truth
+description: Observed by groundtruth-agent
+---
+name: gpu_count
+label: GPU count
+type: integer
+object_types: [dcim.device]
+group_name: Ground truth
+description: Observed by groundtruth-agent
+---
+name: bios_version
+label: BIOS version
+type: text
+object_types: [dcim.device]
+group_name: Ground truth
+description: Observed by groundtruth-agent
+---
+name: os_version
+label: OS version
+type: text
+object_types: [dcim.device]
+group_name: Ground truth
+description: Observed by groundtruth-agent
+---
+name: last_collected
+label: Last collected
+type: datetime
+object_types: [dcim.device]
+group_name: Ground truth
+description: Last run of groundtruth-agent

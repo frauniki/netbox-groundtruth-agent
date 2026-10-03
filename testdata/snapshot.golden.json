@@ -1,0 +1,93 @@
+{
+  "collected_at": "0001-01-01T00:00:00Z",
+  "hostname": "test-host-01",
+  "system": {
+    "manufacturer": "Example Corp",
+    "product": "Example Server X100",
+    "serial": "EXAMPLE-SN-0001",
+    "board_serial": "EXAMPLE-BSN-0001",
+    "bios_version": "1.2.3"
+  },
+  "os": {
+    "name": "Ubuntu",
+    "version": "24.04",
+    "pretty_name": "Ubuntu 24.04.1 LTS",
+    "kernel_version": "6.8.0-45-generic"
+  },
+  "cpu": {
+    "model": "Example(R) CPU E-1000 @ 2.00GHz",
+    "sockets": 2,
+    "cores": 4,
+    "threads": 8,
+    "socket_ids": [
+      0,
+      1
+    ]
+  },
+  "memory": {
+    "total_bytes": 85899345920,
+    "modules": [
+      {
+        "locator": "DIMM_A1",
+        "bank_locator": "BANK 0",
+        "size_bytes": 68719476736,
+        "type": "DDR5",
+        "speed_mts": 4800,
+        "manufacturer": "ExampleMem",
+        "part_number": "EXM-64G-4800",
+        "serial": "MEMSERIAL0001"
+      },
+      {
+        "locator": "DIMM_B1",
+        "bank_locator": "BANK 2",
+        "size_bytes": 17179869184,
+        "type": "DDR5",
+        "speed_mts": 4800,
+        "manufacturer": "ExampleMem",
+        "part_number": "EXM-16G-4800"
+      }
+    ]
+  },
+  "disks": [
+    {
+      "name": "nvme0n1",
+      "model": "EXAMPLE NVME 3.84TB",
+      "serial": "NVMESERIAL0001",
+      "size_bytes": 3840755982336,
+      "transport": "nvme"
+    },
+    {
+      "name": "sda",
+      "model": "EXAMPLE SSD 960G",
+      "serial": "SATASERIAL0001",
+      "size_bytes": 960197124096,
+      "transport": "sata"
+    }
+  ],
+  "nics": [
+    {
+      "name": "eno1",
+      "mac": "00:00:5E:00:53:01",
+      "speed_mbps": 25000,
+      "driver": "ice",
+      "pci_address": "0000:17:00.0"
+    },
+    {
+      "name": "eno2",
+      "mac": "00:00:5E:00:53:02",
+      "speed_mbps": 25000,
+      "driver": "ice",
+      "pci_address": "0000:17:00.1"
+    }
+  ],
+  "gpus": [
+    {
+      "model": "NVIDIA Corporation GH100 [H100 SXM5 80GB]",
+      "pci_address": "0000:3b:00.0"
+    }
+  ],
+  "ip_addresses": [],
+  "incomplete": [
+    "ip_addresses"
+  ]
+}

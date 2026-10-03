@@ -1,0 +1,40 @@
+processor	: 0
+vendor_id	: GenuineIntel
+model name	: Example(R) CPU E-1000 @ 2.00GHz
+physical id	: 0
+
+processor	: 1
+vendor_id	: GenuineIntel
+model name	: Example(R) CPU E-1000 @ 2.00GHz
+physical id	: 0
+
+processor	: 2
+vendor_id	: GenuineIntel
+model name	: Example(R) CPU E-1000 @ 2.00GHz
+physical id	: 1
+
+processor	: 3
+vendor_id	: GenuineIntel
+model name	: Example(R) CPU E-1000 @ 2.00GHz
+physical id	: 1
+
+processor	: 4
+vendor_id	: GenuineIntel
+model name	: Example(R) CPU E-1000 @ 2.00GHz
+physical id	: 0
+
+processor	: 5
+vendor_id	: GenuineIntel
+model name	: Example(R) CPU E-1000 @ 2.00GHz
+physical id	: 0
+
+processor	: 6
+vendor_id	: GenuineIntel
+model name	: Example(R) CPU E-1000 @ 2.00GHz
+physical id	: 1
+
+processor	: 7
+vendor_id	: GenuineIntel
+model name	: Example(R) CPU E-1000 @ 2.00GHz
+physical id	: 1
+

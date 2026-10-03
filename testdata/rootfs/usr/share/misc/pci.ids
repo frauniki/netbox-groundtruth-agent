@@ -1,0 +1,7 @@
+# Minimal pci.ids for tests
+10de  NVIDIA Corporation
+	2330  GH100 [H100 SXM5 80GB]
+		10de 16c1  H100 SXM5 80GB
+1a03  ASPEED Technology, Inc.
+	2000  ASPEED Graphics Family
+C 03  Display controller

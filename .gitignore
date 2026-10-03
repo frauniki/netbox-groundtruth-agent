@@ -1,0 +1,4 @@
+/dist/
+/vendor/
+/groundtruth-agent
+*.prom
