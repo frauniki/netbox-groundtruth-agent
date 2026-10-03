@@ -17,7 +17,7 @@ func nvmlGPUs() ([]snapshot.GPU, error) {
 	if ret := nvml.Init(); ret != nvml.SUCCESS {
 		return nil, fmt.Errorf("nvml init: %v", ret)
 	}
-	defer nvml.Shutdown()
+	defer func() { _ = nvml.Shutdown() }()
 	driver, _ := nvml.SystemGetDriverVersion()
 	n, ret := nvml.DeviceGetCount()
 	if ret != nvml.SUCCESS {
