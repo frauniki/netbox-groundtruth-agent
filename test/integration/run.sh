@@ -35,7 +35,7 @@ cd "$work/netbox-docker"
 # with API_TOKEN_PEPPER_*) uses v2 tokens: nbt_<12-char key>.<40-char token>;
 # older images take a 40-character v1 token in SUPERUSER_API_TOKEN.
 # pipefail off: tr ends with SIGPIPE when head has read enough.
-rand() { (set +o pipefail; LC_ALL=C tr -dc 'A-Za-z0-9' </dev/urandom | head -c "$1"); }
+rand() { (set +o pipefail; LC_ALL=C tr -dc 'A-Za-z0-9' </dev/urandom 2>/dev/null | head -c "$1"); }
 key=$(rand 12)
 secret=$(rand 40)
 cat > docker-compose.override.yml <<YAML
@@ -43,6 +43,8 @@ services:
   netbox:
     ports:
       - "127.0.0.1:$port:8080"
+    healthcheck:
+      start_period: 600s # the first start runs all database migrations
     environment:
       SKIP_SUPERUSER: "false"
       SUPERUSER_NAME: admin
@@ -52,12 +54,21 @@ services:
       SUPERUSER_API_TOKEN: "$secret"
 YAML
 
-docker compose -p "$project" up -d --quiet-pull
+# "up" can fail while NetBox is still migrating (the worker waits for it to
+# be healthy); readiness is checked below instead.
+docker compose -p "$project" up -d --quiet-pull || true
 echo "waiting for NetBox on port $port ..."
+ready=
 for _ in $(seq 120); do
-  curl -fsS "http://127.0.0.1:$port/login/" >/dev/null 2>&1 && break
+  if curl -fsS "http://127.0.0.1:$port/login/" >/dev/null 2>&1; then ready=1; break; fi
   sleep 5
 done
+if [[ -z $ready ]]; then
+  docker compose -p "$project" ps
+  docker compose -p "$project" logs --tail 200 netbox
+  echo "NetBox did not become ready" >&2
+  exit 1
+fi
 
 export NETBOX_URL="http://127.0.0.1:$port"
 if grep -q API_TOKEN_PEPPER env/netbox.env; then
