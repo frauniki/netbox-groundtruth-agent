@@ -8,6 +8,8 @@ package integration
 import (
 	"bytes"
 	"context"
+	"crypto/rand"
+	"encoding/hex"
 	"errors"
 	"fmt"
 	"io"
@@ -81,8 +83,10 @@ func TestAgainstNetBox(t *testing.T) {
 	snap.IPAddresses = []string{"192.0.2.10/24", "198.51.100.7/24"}
 	snap.Incomplete = slices.DeleteFunc(snap.Incomplete, func(s string) bool { return s == snapshot.SectionIPAddresses })
 
+	// The agent runs with only the permissions documented in the README.
+	agent := agentClient(t, c, nbURL)
 	cfg := config.Default().Sync
-	p, err := planner.Build(ctx, c, snap, cfg)
+	p, err := planner.Build(ctx, agent, snap, cfg)
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -105,7 +109,7 @@ func TestAgainstNetBox(t *testing.T) {
 	if err := p.CheckLimits(cfg); err != nil {
 		t.Fatal(err)
 	}
-	if n, err := (nbsink.Sink{Client: c}).Apply(ctx, p); err != nil {
+	if n, err := (nbsink.Sink{Client: agent}).Apply(ctx, p); err != nil {
 		t.Fatalf("apply stopped after %d changes: %v", n, err)
 	}
 
@@ -147,13 +151,67 @@ func TestAgainstNetBox(t *testing.T) {
 	}
 
 	// A second run changes nothing.
-	again, err := planner.Build(ctx, c, snap, cfg)
+	again, err := planner.Build(ctx, agent, snap, cfg)
 	if err != nil {
 		t.Fatal(err)
 	}
 	if len(again.Changes) != 0 {
 		t.Errorf("second run plans changes: %+v", again.Changes)
 	}
+}
+
+// agentClient creates a user holding exactly the permissions listed under
+// "Required permissions" in the README (without interface "add", which is
+// only needed with sync.create_interfaces) and returns a client using its token.
+func agentClient(t *testing.T, admin *netbox.Client, nbURL string) *netbox.Client {
+	t.Helper()
+	perms := map[string][]string{
+		"dcim.device":        {"view", "change"},
+		"dcim.interface":     {"view", "change"},
+		"dcim.inventoryitem": {"view", "add", "change", "delete"},
+		"extras.tag":         {"view"},
+		"ipam.ipaddress":     {"view"},
+	}
+	if admin.MACObjects() {
+		perms["dcim.macaddress"] = []string{"view", "add"}
+	}
+	user := create(t, admin, "/api/users/users/", obj{"username": "groundtruth-agent", "password": "Gt1-" + randHex(t, 16)})
+	for objectType, actions := range perms {
+		create(t, admin, "/api/users/permissions/", obj{
+			"name": "groundtruth-agent " + objectType, "object_types": []string{objectType}, "actions": actions, "users": []int{user},
+		})
+	}
+	// NetBox before 4.5 takes the v1 key from the request. Later releases
+	// ignore it and return the secret once, in "token" (v2: nbt_<key>.<token>).
+	key := randHex(t, 20)
+	var tok struct {
+		Version int    `json:"version"`
+		Key     string `json:"key"`
+		Token   string `json:"token"`
+	}
+	do(t, admin, http.MethodPost, "/api/users/tokens/", obj{"user": user, "key": key}, &tok)
+	switch {
+	case tok.Version == 2:
+		key = "nbt_" + tok.Key + "." + tok.Token
+	case tok.Token != "":
+		key = tok.Token
+	}
+	c, err := netbox.New(config.NetBox{URL: nbURL}, key)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if err := c.Init(context.Background()); err != nil {
+		t.Fatal(err)
+	}
+	return c
+}
+
+func randHex(t *testing.T, n int) string {
+	b := make([]byte, n)
+	if _, err := rand.Read(b); err != nil {
+		t.Fatal(err)
+	}
+	return hex.EncodeToString(b)
 }
 
 // importCustomFields creates the custom fields of the example file, which
