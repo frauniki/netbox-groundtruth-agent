@@ -105,7 +105,7 @@ Give the agent its own user and token. A NetBox object permission can't be limit
 | Extras › Tag | view | look up the owner tag |
 | IPAM › IP Address | view | report IP differences |
 
-`add` on interfaces is only needed with `sync.create_interfaces: true`.
+`add` on interfaces is only needed with `sync.create_interfaces: true`. The integration test runs the agent with exactly this set (without interface `add`) on NetBox 4.1 and 4.7.
 
 ## Installation
 
@@ -235,7 +235,6 @@ The test imports `examples/custom-fields.yaml` through the API and creates the o
 ## Open items
 
 - The custom field file is imported through the REST API in the integration test. Importing it through the UI's bulk import form is untested.
-- The minimal permission set in [Required permissions](#required-permissions) has not been tested with a restricted token.
 
 ## License
 
